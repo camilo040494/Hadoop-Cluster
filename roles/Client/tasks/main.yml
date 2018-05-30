@@ -1,0 +1,66 @@
+- debug: var=public_key
+  when: foo is defined
+
+- debug: var=hostvars['172.17.177.21']
+  when: hostvars['172.17.177.21'] is defined 
+
+- debug: var=hostvars['172.17.177.21']['public_key']
+
+#- name: Append ssh public key
+#  lineinfile:
+#    path: /home/vagrant/.ssh/authorized_keys
+#    create: yes
+#    state: present
+#    line: "{{ hostvars['172.17.177.21']['public_key']['stdout'] }}"
+#    owner: vagrant
+#    group: vagrant
+#    mode: 0600
+
+- name: Append master to etc/hosts
+  lineinfile:
+    path: /etc/hosts
+    create: yes
+    state: present
+    line: "{{ item }}\tmaster"
+  with_items: "{{ groups['Server'] }}"
+
+- name: Append slaves to etc/hosts
+  lineinfile:
+    path: /etc/hosts
+    create: yes
+    state: present
+    line: "{{ item }}\tslave{{my_idx|int+1}}"
+  with_items: "{{ groups['Client'] }}"
+  loop_control:
+    index_var: my_idx
+
+######################### Funciono de lo lindo
+#- name: Append master to etc/hosts
+#  lineinfile:
+#    #path: /etc/hosts
+#    create: yes
+#    state: present
+#    line: "{{ item }}\t{{my_idx}}"
+#  with_items: "{{ groups['all'] }}"
+#  loop_control:
+#    index_var: my_idx
+#########################
+
+
+######################### Funciono de lo lindo
+#- name: Append in etc hosts
+#  lineinfile:
+#    path: /etc/hosts
+#    create: yes
+#    state: present
+    #line: "172.17.177.{{ item }} \t slave{{ item }}"
+#    line: "172.17.177.{{ item|int+20}} \t slave{{ item }}"
+#  with_sequence: start=1 end=5
+#########################
+
+#  shell: "echo {{ hostvars['172.17.177.21']['public_key']['stdout'] }} >> /home/vagrant/\.ssh/authorized_keys"
+#  args:
+#    creates: /home/vagrant/.ssh/authorized_keys
+
+#- name: Clean hostsfile
+#  shell: cat /dev/null > /etc/hosts

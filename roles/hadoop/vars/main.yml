@@ -1,0 +1,4 @@
+master_name: master
+hdfs_directory: /home/{{ user }}/hdfs/
+hadoop_directory: /usr/lib/hadoop/
+replication: 1

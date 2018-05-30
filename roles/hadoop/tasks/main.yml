@@ -1,0 +1,50 @@
+- name: Creates directory
+  file: path=/usr/lib/hadoop/etc/hadoop state=directory
+
+- name: Copying core-site.xml template
+  template:
+    src: core-site.xml.j2
+    dest: "{{ hadoop_directory }}etc/hadoop/core-site.xml"
+    owner: root
+    group: root
+    mode: '0777'
+    
+- name: Copying hdfs-site.xml template
+  template:
+    src: hdfs-site.xml.j2
+    dest: "{{ hadoop_directory }}etc/hadoop/hdfs-site.xml"
+    owner: root
+    group: root
+    mode: '0777'
+
+- name: Copying mapred-site.xml files
+  copy:
+    src: mapred-site.xml
+    dest: "{{ hadoop_directory }}etc/hadoop/mapred-site.xml"
+    owner: root
+    group: root
+    mode: 0777
+
+- name: Copying slaves template
+  template:
+    src: slaves.j2
+    dest: "{{ hadoop_directory }}etc/hadoop/slaves"
+    owner: root
+    group: root
+    mode: '0777'
+
+- name: Copying hadoop.sh file
+  copy:
+    src: hadoop.sh
+    dest: "{{ hadoop_directory }}etc/hadoop/hadoop.sh"
+    owner: root
+    group: root
+    mode: 0777
+
+- name: Copying yarn-site.xml template
+  template:
+    src: yarn-site.xml.j2
+    dest: "{{ hadoop_directory }}etc/hadoop/yarn-site.xml"
+    owner: root
+    group: root
+    mode: '0777'

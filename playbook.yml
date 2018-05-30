@@ -1,0 +1,17 @@
+---
+- hosts: Server 
+  become: true
+  become_user: root
+  roles:
+#  - Server
+#  - ssh
+  - hadoop
+
+- hosts: Client
+  become: true
+  become_user: root
+  gather_facts: True
+  roles:
+#  - ssh
+  - hadoop
+  #- Client

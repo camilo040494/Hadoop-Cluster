@@ -1,0 +1,24 @@
+- name: Generate SSH keys
+  shell: sudo -u {{ user }} ssh-keygen -t rsa -f /home/{{ user }}/.ssh/id_rsa -q -N ""
+  args:
+    creates: "/home/{{ user }}/.ssh/id_rsa"
+
+- name: Public key
+  shell: "cat /home/{{ user }}/.ssh/id_rsa.pub"
+  register: public_key
+
+- name: Disable hostkey verification for master node
+  blockinfile:
+    path: "/home/{{ user }}/.ssh/config"
+    block: |
+      Host *
+        StrictHostKeyChecking no
+    owner: "{{ user }}"
+    group: "{{ user }}"
+    create: yes
+    mode: 0400
+
+- debug: var=public_key
+
+- set_fact:
+     public_key: "{{ public_key }}"
